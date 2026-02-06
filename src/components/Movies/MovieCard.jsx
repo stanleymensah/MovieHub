@@ -1,17 +1,14 @@
 import { useState } from "react";
 import MovieModal from "../UI/MovieModal";
-import {
-  addToWishlist,
-  removeFromWishlist,
-  isInWishlist,
-} from "../UI/AddToWishlish";
+import useWishlist from "../../hooks/useWishlist";
 import { toast } from "react-toastify";
 import axios from "axios";
 
 const MovieCard = ({ movie }) => {
   const [open, setOpen] = useState(false);
   const [movieDetails, setMovieDetails] = useState(null);
-  const [saved, setSaved] = useState(isInWishlist(movie.imdbID));
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const saved = isInWishlist(movie.imdbID);
 
   const fetchMovieDetails = async () => {
     try {
@@ -46,7 +43,6 @@ const MovieCard = ({ movie }) => {
         },
       });
     }
-    setSaved(!saved);
   }
 
   return (
@@ -71,8 +67,8 @@ const MovieCard = ({ movie }) => {
           />
 
           <div className="card-img-overlay d-flex flex-column justify-content-end bg-dark bg-opacity-50">
-            <h6 className="card-title mb-1">{movie.Title}</h6>
-            <small className="text-light">{movie.Year}</small>
+            <h6 className="card-title mb-1" style={{  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}>{movie.Title}</h6>
+            <small className="text-light" style={{  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}>{movie.Year}</small>
 
             <div className="d-flex flex-column flex-md-row">
               <button

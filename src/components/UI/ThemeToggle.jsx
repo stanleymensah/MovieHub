@@ -1,17 +1,8 @@
-import { useEffect, useState } from "react";
+import useTheme from "../../hooks/useTheme";
 import "./ThemeToggle.scss";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-bs-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button

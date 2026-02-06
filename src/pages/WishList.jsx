@@ -1,24 +1,20 @@
-import { useState, useMemo } from "react";
-import {
-  getWishlist,
-  removeFromWishlist,
-} from "../components/UI/AddToWishlish";
+import { useMemo } from "react";
+import useWishlist from "../hooks/useWishlist";
 import { toast } from "react-toastify";
 import ScrollToTop from "../components/UI/ScrollToTop";
 
 export default function WishList({ searchInput = "" }) {
-  const [wishlist, setWishlist] = useState(getWishlist());
+  const { wishlist, removeFromWishlist } = useWishlist();
 
   const filteredWishlist = useMemo(() => {
     if (!searchInput.trim()) return wishlist;
     return wishlist.filter((movie) =>
-      movie.Title.toLowerCase().includes(searchInput.toLowerCase())
+      movie.Title.toLowerCase().includes(searchInput.toLowerCase()),
     );
   }, [wishlist, searchInput]);
 
   function handleRemove(id) {
     removeFromWishlist(id);
-    setWishlist(getWishlist());
     toast("Removed from wishlist!", {
       style: {
         background: "#fa374b",
@@ -60,12 +56,22 @@ export default function WishList({ searchInput = "" }) {
               <h6 className="mb-1">{movie.Title}</h6>
             </div>
 
-            <button
-              className="btn btn-sm btn-outline-danger ms-3"
-              onClick={() => handleRemove(movie.imdbID)}
-            >
-              Remove
-            </button>
+            <div className="d-flex flex-sm-col">
+              <a
+                href={`https://imdb.com/title/${movie.imdbID}`}
+                className="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                IMDb
+              </a>
+              <button
+                className="btn btn-sm btn-outline-danger ms-3"
+                onClick={() => handleRemove(movie.imdbID)}
+              >
+                Remove
+              </button>
+            </div>
           </div>
         ))}
       </div>
