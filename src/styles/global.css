@@ -3,3 +3,13 @@
 *{
     font-family: "Roboto", sans-serif;
 }
+
+.Toastify__toast--success {
+  background: #198754 !important; /* Bootstrap green */
+  color: #fff;
+}
+
+.Toastify__toast--error {
+  background: #dc3545 !important; /* Bootstrap red */
+  color: #fff;
+}

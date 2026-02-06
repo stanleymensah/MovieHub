@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const ScrollToTop = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 200); // show after scrolling 300px
+      setVisible(window.scrollY > 200);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -22,7 +22,7 @@ const ScrollToTop = () => {
     <button
       onClick={handleClick}
       aria-label="Scroll to top"
-      className="btn btn-primary shadow-lg"
+      className="btn btn-primary shadow"
       style={{
         position: "fixed",
         bottom: "20px",

@@ -1,0 +1,40 @@
+// Root Layout Styling
+.root-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// Main content area with spacing for fixed header
+.main-content {
+  flex: 1;
+  // Mobile: header wraps, takes more vertical space
+  margin-top: 150px;
+  padding: 2rem 0;
+
+  @media (max-width: 576px) {
+    margin-top: 140px;
+    padding: 1.5rem 0;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 130px;
+    padding: 1rem 0;
+  }
+
+  // Tablet: header on one line
+  @media (min-width: 768px) {
+    margin-top: 110px;
+    padding: 2.5rem 0;
+  }
+
+  // Desktop
+  @media (min-width: 992px) {
+    margin-top: 105px;
+    padding: 2.5rem 0;
+  }
+
+  @media (min-width: 1200px) {
+    margin-top: 100px;
+  }
+}

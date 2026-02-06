@@ -2,9 +2,17 @@ import MovieCard from "./MovieCard";
 import MoviePagination from "./MoviePagination";
 import MovieState from "./MovieState";
 
-const MovieGrid = ({ movies, loading, error, page, totalPages, onPageChange }) => {
+const MovieGrid = ({
+  movies,
+  loading,
+  error,
+  page,
+  totalPages,
+  onPageChange,
+}) => {
   return (
-    <main className="container" style={{marginTop: "120px"}}>
+    <main
+      className="container">
       <MoviePagination
         page={page}
         totalPages={totalPages}

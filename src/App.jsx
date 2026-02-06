@@ -1,11 +1,19 @@
-import { useEffect, useState, useCallback, StrictMode } from "react";
-import Header from "./components/Header/Header";
-import MovieGrid from "./components/Movies/MovieGrid";
-import Footer from "./components/Footer/Footer";
-import ScrollToTop from "./components/UI/ScrollToTop";
+import { useEffect, useState, useCallback } from "react";
+import Home from "./pages/Home";
+import WishList from "./pages/WishList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import {
+  createBrowserRouter,
+  Route,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
+import RootLayout from "./components/layouts/RootLayout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useDebounce from "./hooks/UseDebounce";
 
 const API_KEY = "71fa5d10";
 const DEFAULT_QUERY = "Movie";
@@ -25,7 +33,7 @@ const App = () => {
 
     try {
       const res = await fetch(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${q}&page=${p}&type=movie`
+        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${q}&page=${p}&type=movie`,
       );
       const data = await res.json();
       // console.log(data);
@@ -48,39 +56,75 @@ const App = () => {
   // initial load
   useEffect(() => {
     fetchMovies(query, 1);
-  }, []);
+  }, [fetchMovies, query]);
 
-  // debounced search
+  const debouncedInput = useDebounce(input, 500);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (input.trim()) {
-        setQuery(input);
-        setPage(1);
-        fetchMovies(input, 1);
-      }
-    }, 600);
+    if (!debouncedInput.trim()) {
+      setQuery(DEFAULT_QUERY);
+      setPage(1);
+      fetchMovies(DEFAULT_QUERY, 1);
+      return;
+    }
 
-    return () => clearTimeout(timer);
-  }, [input]);
+    setQuery(debouncedInput);
+    setPage(1);
+    fetchMovies(debouncedInput, 1);
+  }, [debouncedInput, fetchMovies]);
+
+  const handleInput = (value) => {
+    setInput(value);
+  };
+
+  const handleSubmit = (q) => {
+    if (!q) return;
+    setInput(q);
+    setQuery(q);
+    setPage(1);
+    fetchMovies(q, 1);
+  };
 
   const handlePageChange = (p) => {
     setPage(p);
     fetchMovies(query, p);
   };
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route
+        path="/"
+        element={<RootLayout onInput={handleInput} onSubmit={handleSubmit} />}
+      >
+        <Route
+          index
+          element={
+            <Home
+              movies={movies}
+              loading={loading}
+              error={error}
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          }
+        />
+        <Route path="wishlist" element={<WishList searchInput={input} />} />
+      </Route>,
+    ),
+  );
+
   return (
     <>
-      <Header onInput={setInput} onSubmit={setInput} />
-      <MovieGrid
-        movies={movies}
-        loading={loading}
-        error={error}
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
+      <RouterProvider router={router} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        pauseOnHover
       />
-      <Footer />
-      <ScrollToTop />
     </>
   );
 };
