@@ -29,7 +29,7 @@ export default function WishList({ searchInput = "" }) {
 
   if (!filteredWishlist.length) {
     return <p className="text-center mt-5">No movies match your search.</p>;
-  }
+  } 
 
   return (
     <div className="container">
